@@ -1,0 +1,69 @@
+{
+    "name" : "Trader Bot",
+    "description" : "Custom Trader Bot",
+    "version" : "1.0",
+    "author": "Nima Hosseini",
+    "current_locale": "en",
+    "manifest_version" : 2,
+    "content_scripts": [
+        {
+            "matches": [
+                "https://pocketoption.com/*"
+            ],
+            "js": [
+                "assets/ext/jquery-3.4.1.min.js",
+                "src/injector.js",
+                "src/content.js",
+                "src/middleware.js",
+                "src/process.js",
+                "src/timer.js"
+            ],
+            "run_at": "document_start"
+        },
+        {
+            "matches": [
+                "https://pocketoption.com/*cabinet*"
+            ],
+            "js": [
+                "assets/ext/jquery-3.4.1.min.js",
+                "assets/ext/bootstrap.min.js",
+                "src/main.js"
+            ],
+            "css": [
+                "assets/ext/bootstrap.min.css"
+            ],
+            "run_at": "document_end"
+        }
+    ],
+    "permissions": [
+        "https://pocketoption.com/*",
+        "storage",
+        "tabs",
+        "<all_urls>",
+        "http://*/*"
+    ],
+    "web_accessible_resources": [
+        "src/content.js",
+        "assets/images/close.svg",
+        "assets/images/done.svg",
+        "assets/images/doneall.svg",
+        "src/process.js",
+        "src/middleware.js",
+        "src/timer.js"
+    ],
+    "background": {
+		"scripts": [
+            "assets/ext/jquery-3.4.1.min.js",
+            "src/background.js"
+        ]
+	},
+    "browser_action": {
+        "default_title": "Trader Bot",
+        "default_icon": "assets/icons/bot.png"
+    },
+    "icons": {
+        "16": "assets/icons/bot.png",
+        "48": "assets/icons/bot.png",
+        "128": "assets/icons/bot.png"
+    }
+}
