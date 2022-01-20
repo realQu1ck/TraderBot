@@ -7,12 +7,14 @@ Indicators : EMA Period = 28 SMA Period = 28 CCI Period = 18 Momentum Period = 1
 
 Install :
 
-Open Google Chrome
-Go to extensions
-Click On Manage Extensions
-Turn On Developer Option
-Click on load unpdacked
-Select Project Destination
-Open https://pocketoption.com/
+1. Open Google Chrome
+2. Go to extensions
+3. Click On Manage Extensions
+4. Turn On Developer Option
+5. Click on load unpdacked
+6. Select Project Destination
+7. Open https://pocketoption.com/
+
+
 And Just See the result :)
 This project developed by Nima Hosseini Thanks
