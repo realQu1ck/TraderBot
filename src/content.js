@@ -1,7 +1,7 @@
 var ProcessOP = [];
 
 function addMinutes(date, minutes) {
-    return new Date(date.getTime() + minutes*60000);
+    return new Date(date.getTime() + minutes * 60000);
 }
 
 function content() {
@@ -9,7 +9,8 @@ function content() {
     var FConf = false;
     var SConf = false;
     var TConf = false;
-    
+    var FCConf = false;
+
     var key = 1;
     var LastCandleId = Middleware.CANDLES[Middleware.CANDLES.length - 1];
     var LastCandle = Middleware.CANDLES[Middleware.CANDLES.length - 1].Price;
@@ -23,7 +24,7 @@ function content() {
         IsHorizotalMovingAvrageEMAIndictor = true;
     else
         IsHorizotalMovingAvrageEMAIndictor = false;
-    console.log(CheckEMA, LastEMA, LastCandle);
+
     switch (key) {
         case 1:
             if (LastCandle >= LastEMA && IsHorizotalMovingAvrageEMAIndictor)
@@ -31,25 +32,29 @@ function content() {
             else
                 FConf = false;
             key++;
-        // break;
         case 2:
             if (-100 >= LastCCI)
-                SConf = false;
-            else
                 SConf = true;
+            else
+                SConf = false;
             key++;
-        // break;
         case 3:
             if (LastMomentum.ColorState === false)
                 TConf = false;
             else
                 TConf = true;
+            key++;
+        case 4:
+            if (LastCCI >= 100)
+                FCConf = true;
+            else
+                FCConf = false;
             break;
         default:
             alert("Oprations Failed !!!");
             break;
     }
-    Determiner(FConf, SConf, TConf);
+    Determiner(FConf, SConf, TConf, FCConf);
     ProcessOP.push({
         CId: LastCandleId.Id,
         Id: ProcessOP.length + 1
@@ -70,23 +75,26 @@ function idUpdateorContent() {
     $(Middleware.DIVTOCloseCLassName).attr("id", Middleware.CloseButtonID);
 }
 
-function Determiner(FConf, SConf, TConf) {
+function Determiner(FConf, SConf, TConf, FCConf) {
     console.log("Robot Deciding ...");
-    if (FConf === true && SConf === true && TConf === true) {
-        if ((Middleware.CANDLES[Middleware.CANDLES - 1].Id - Middleware.LastTrade[0].LastCandle) >= 2) {
-            CALL();            
-        }
-    } else if (FConf === false && SConf === false && TConf === false) {
-        if ((Middleware.CANDLES[Middleware.CANDLES - 1].Id - Middleware.LastTrade[0].LastCandle) >= 2) {
-            PUT();            
-        }
+    if (FConf === true && SConf === false && TConf === true && FCConf == true) {
+        if (Middleware.LastTrade.length === 0)
+            CALL();
+        else if ((Middleware.CANDLES[Middleware.CANDLES.length - 1].Id - Middleware.LastTrade[0].LastCandle) >= 3)
+            CALL();
+    } else if (FConf === true && SConf === true && TConf === true && FCConf == false) {
+        if (Middleware.LastTrade.length === 0)
+            PUT();
+        else if ((Middleware.CANDLES[Middleware.CANDLES.length - 1].Id - Middleware.LastTrade[0].LastCandle) >= 3)
+            PUT();
     }
 }
 
 function CALL() {
+    Middleware.LastTrade = [];
     console.log('Calling');
     document.getElementById(Middleware.CalButtonId).click();
-    Middleware.LastTrade.push({LsatCandle : Middleware.CANDLES[Middleware.CANDLES].Id});
+    Middleware.LastTrade.push({ LastCandle: Middleware.CANDLES[Middleware.CANDLES.length - 1].Id });
 }
 
 function Close() {
@@ -94,6 +102,8 @@ function Close() {
 }
 
 function PUT() {
+    Middleware.LastTrade = [];
     console.log('Putting');
     document.getElementById(Middleware.PutButtonId).click();
+    Middleware.LastTrade.push({ LastCandle: Middleware.CANDLES[Middleware.CANDLES.length - 1].Id });
 }

@@ -234,7 +234,7 @@
         var StartPriceLastCandle = LastCandle.Price;
         var ClosingPrice_n_Period_Ago = Candles[Candles.length - Middleware.MOMENTUMPERIOD].Price;
         var Result = StartPriceLastCandle - ClosingPrice_n_Period_Ago;
-        if (Result > 0)
+        if (Result >= 0)
             MomentumR.push({ Id: MomentumR.length + 1, Result: Result, ColorState: true, TPId: LastCandle.Id });
         else
             MomentumR.push({ Id: MomentumR.length + 1, Result: Result, ColorState: false, TPId: LastCandle.Id });
@@ -253,7 +253,8 @@
 
     function TypicalProcess() {
         var lastCandle = Candles[Candles.length - 1];
-        var std = lastCandle.Price;
+        var sum = lastCandle.Price + lastCandle.LowPrice + lastCandle.HighPrice;
+        var std = sum / 3;
         TypicalPriceResults.push({
             Id: TypicalPriceResults.length + 1,
             Result: std,
@@ -302,7 +303,7 @@
             MD += Math.abs(TPR - MA);
         }
         MD = MD / Middleware.CCIPERIOD;
-        var Result = (TP.Result - MA) / (0.015 * MD);
+        var Result = (TP.Result - MA) / (0.018 * MD);
         Middleware.CCIRESULTS.push({
             Id: Middleware.CCIRESULTS.length + 1,
             TPId: TP.Id,

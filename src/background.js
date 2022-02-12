@@ -29,11 +29,10 @@ chrome.runtime.onConnect.addListener(function (data) {
     if (data.name == "PocketOptionRobot") {
         MessageConnect[data.name] = data;
         MessageConnect[data.name].onMessage.addListener(function (request, sender) {
-            console.log(request, sender);
+            
         });
 
         MessageConnect[data.name].onDisconnect.addListener(function (port) {
-            console.log('PocketOptionRobot is disconnect: ', port);
             SERVER_CONNECTED = {
                 'server': false,
                 'server_main': false
@@ -43,7 +42,6 @@ chrome.runtime.onConnect.addListener(function (data) {
 });
 
 function reloadPage() {
-    console.log('reloadPage');
     chrome.tabs.query({}, function (tabs) {
         for (let tab of tabs) {
             if (urlCheck(tab.url) == true) {
